@@ -1,0 +1,23 @@
+# Specify the main folder where your files and subdirectories are located
+$mainFolderPath = "D:\ProgramCache\CodeBlocks\MinGW\bin\ac.exe\pics\for\reddit"
+
+# Recursively get a list of all files in the main folder and its subdirectories
+$files = Get-ChildItem -Path $mainFolderPath -File -Recurse
+
+# Define a regular expression pattern to match unusual characters
+$unusualCharacterPattern = "[^A-Za-z0-9_.-]"
+
+# Loop through each file
+foreach ($file in $files) {
+    # Check if the file name contains unusual characters
+    if ($file.Name -match $unusualCharacterPattern) {
+        # Remove the unusual characters from the file name
+        $newFileName = $file.Name -replace $unusualCharacterPattern, ""
+
+        # Construct the new full file path
+        $newFilePath = Join-Path -Path $file.DirectoryName -ChildPath $newFileName
+
+        # Rename the file
+        Rename-Item -Path $file.FullName -NewName $newFileName
+    }
+}
