@@ -245,7 +245,7 @@ if (isset($cd)) {
   $objects = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($path), RecursiveIteratorIterator::SELF_FIRST);
   foreach ($objects as $name => $object) {
     if (str_contains(strtolower($name), '.jpg') || str_contains(strtolower($name), '.gif') || str_contains(strtolower($name), '.tiff') || str_contains(strtolower($name), '.jpeg') || str_contains(strtolower($name), '.jfif') || str_contains(strtolower($name), '.png')) {
-      if (str_contains($name, '\\for\\')) {
+      if (str_contains($name, '\\f\\')) {
         $arrayf[] = $name;
       } else {
         $arrayd[] = $name;
