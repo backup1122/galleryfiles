@@ -3,6 +3,91 @@ var rotatef = true;
 //var outlink="https://glpy-api.herokuapp.com";
 var outlink="https://gdpy.onrender.com";
 //var outlink='http://127.0.0.1:5000'
+var gitlink='https://raw.githubusercontent.com/backup1122/galleryfiles/master/';
+const token = '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';
+const username = 'backup1122';
+const repo = 'galleryfiles';
+
+function deleteFile(path) {
+  // Fetch the current content and details of the file
+  fetch(`https://api.github.com/repos/${username}/${repo}/contents/${path}`, {
+    method: 'GET',
+    headers: {
+      'Authorization': `token ${token}`,
+    },
+  })
+  .then(response => response.json())
+  .then(data => {
+    // Delete the file on GitHub
+    fetch(`https://api.github.com/repos/${username}/${repo}/contents/${path}`, {
+      method: 'DELETE',
+      headers: {
+        'Authorization': `token ${token}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        message: 'Delete file',
+        sha: data.sha,
+      }),
+    })
+    .then(response => response.json())
+    .then(deletedFile => {
+      console.log('File deleted:', deletedFile);
+    })
+    .catch(error => {
+      console.error('Error deleting file:', error);
+    });
+  })
+  .catch(error => {
+    console.error('Error fetching file details:', error);
+  });
+}
+
+function updateFile(path, updatedBlob) {
+  // Fetch the current content and details of the file
+  fetch(`https://api.github.com/repos/${username}/${repo}/contents/${path}`, {
+    method: 'GET',
+    headers: {
+      'Authorization': `token ${token}`,
+    },
+  })
+  .then(response => response.json())
+  .then(data => {
+    // Read the Blob content as a data URL
+    const reader = new FileReader();
+    reader.onloadend = function () {
+      const base64data = reader.result.split(',')[1];
+
+      // Update the file on GitHub
+      fetch(`https://api.github.com/repos/${username}/${repo}/contents/${path}`, {
+        method: 'PUT',
+        headers: {
+          'Authorization': `token ${token}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          message: 'Update file',
+          content: base64data,
+          sha: data.sha,
+        }),
+      })
+      .then(response => response.json())
+      .then(updatedFile => {
+        console.log('File updated:', updatedFile);
+        
+      })
+      .catch(error => {
+        console.error('Error updating file:', error);
+      });
+    };
+
+    reader.readAsDataURL(updatedBlob);
+  })
+  .catch(error => {
+    console.error('Error fetching file details:', error);
+  });
+}
+
 function rotateout(deg = 90) {
 
   if (rotatef) {
@@ -17,25 +102,8 @@ function rotateout(deg = 90) {
     }
 
     console.log(ssr);
-    var xhttp = new XMLHttpRequest();
-    xhttp.onreadystatechange = function () {
-      if (this.readyState === XMLHttpRequest.DONE && this.status == 200) {
-        //cout(JSON.parse(this.responseText).done);
-        //snackbar(JSON.parse(this.responseText).done);
-        rotatef = true;
-
-        rotater(deg);
-        snackbar('Rotated');
-        //rlist[num] = ssr;
-      }
-      else {
-        //cout('error');
-      }
-    };
-    xhttp.open("POST", outlink+"/rotatedir", true);
-    xhttp.setRequestHeader("Content-type", "application/json");
-
-    xhttp.send(JSON.stringify({ dir: ssr, angle: deg }));
+    //rotatef = true;
+    rotater(deg,ssr);
   }
 }
 
@@ -84,7 +152,9 @@ var addoutdir = () => {
       dell = 0;
     }
     cout(dell);
-    var xhttp = new XMLHttpRequest();
+    path=ssr.replace(gitlink,'');
+    deleteFile(path);
+    /*var xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function () {
       if (this.readyState === XMLHttpRequest.DONE && this.status == 200) {
         cout(JSON.parse(this.responseText).done);
@@ -105,7 +175,7 @@ var addoutdir = () => {
     xhttp.open("POST", outlink+"/adddeletedir", true);
     xhttp.setRequestHeader("Content-type", "application/json");
 
-    xhttp.send(JSON.stringify({ dir: ssr }));
+    xhttp.send(JSON.stringify({ dir: ssr }));*/
   }
   else {
     cout('n');
@@ -266,7 +336,8 @@ function rotateweb(srcBase64, degrees, callback) {
 
   image.src = srcBase64;
 }
-var rotater = (deg) => {
+var rotater = (deg,src) => {
+  rotatef = true;
   const imgr = document.querySelector("#full-image");
   var psrc = imgr.attributes.src.value;
   rotateweb(imgr.attributes.src.value, deg, function (resultBase64) {
@@ -277,5 +348,34 @@ var rotater = (deg) => {
     }
     DATA[parseInt(imgr.getAttribute('num'))] = resultBase64;
     track_rotate(psrc, nsrc);
+    var path=src.replace(gitlink,'');
+    var updatedBlob = dataURItoBlob(resultBase64);
+    updateFile(path, updatedBlob);
   });
+}
+
+var dataURItoBlob = (dataURI) => {
+  // convert base64 to raw binary data held in a string
+  // doesn't handle URLEncoded DataURIs
+
+  var byteString = atob(dataURI.split(',')[1]);
+
+  // separate out the mime component
+  var mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0]
+
+  // write the bytes of the string to an ArrayBuffer
+  var ab = new ArrayBuffer(byteString.length);
+
+  // create a view into the buffer
+  var ia = new Uint8Array(ab);
+
+  // set the bytes of the buffer to the correct values
+  for (var i = 0; i < byteString.length; i++) {
+      ia[i] = byteString.charCodeAt(i);
+  }
+
+  // write the ArrayBuffer to a blob, and you're done
+  var blob = new Blob([ab], {type: 'image/jpeg'});
+  return blob;
+
 }
