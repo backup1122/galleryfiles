@@ -4,7 +4,7 @@ var rotatef = true;
 var outlink="https://gdpy.onrender.com";
 //var outlink='http://127.0.0.1:5000'
 var gitlink='https://raw.githubusercontent.com/backup1122/galleryfiles/master/';
-const token = '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';
+const token = localStorage.getItem('token');
 const username = 'backup1122';
 const repo = 'galleryfiles';
 
@@ -32,6 +32,18 @@ function deleteFile(path) {
     })
     .then(response => response.json())
     .then(deletedFile => {
+      cout(JSON.parse(this.responseText).done);
+        snackbar(JSON.parse(this.responseText).done);
+        var anum = parseInt(document.querySelector("#full-image").getAttribute("num"));
+        DATA.splice(anum, 1);
+        document.querySelector("#full-image").src = DATA[anum];
+        if (dell == 1) {
+          document.querySelector("body > div.images > img:nth-child(" + now + ")").src = DATA[anum];
+          //document.querySelector("body > div.images > img:nth-child("+now+")").setAttribute('num',anum)        
+        }
+        if (document.querySelector("#full-image").getAttribute('num') < document.querySelector("body > div.images > img:nth-child(" + now + ")").getAttribute('num')) {
+          document.querySelector("body > div.images > img:nth-child(" + now + ")").setAttribute('num', (document.querySelector("body > div.images > img:nth-child(" + now + ")").getAttribute('num') - 1));
+        }
       console.log('File deleted:', deletedFile);
     })
     .catch(error => {
