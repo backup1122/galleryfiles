@@ -77,6 +77,7 @@ function updateFile(path, updatedBlob) {
       })
       .then(response => response.json())
       .then(updatedFile => {
+        snackbar("Updated");
         console.log('File updated:', updatedFile);
         
       })
