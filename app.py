@@ -23,7 +23,7 @@ def minify_filenames(folder_path):
 
 if __name__ == "__main__":
     #"D:\\ProgramCache\\CodeBlocks\\MinGW\\bin\\ac.exe\\pics\\f\\r\\18", 
-    arr=["D:\\ProgramCache\\CodeBlocks\\MinGW\\bin\\ac.exe\\pics\\f\\r\\8", "D:\\ProgramCache\\CodeBlocks\\MinGW\\bin\\ac.exe\\pics\\f\\r\\9"]
+    arr=["D:\\ProgramCache\\CodeBlocks\\MinGW\\bin\\ac.exe\\pics\\f\\r\\18"]
     for i in arr:
         minify_filenames(i)
     
