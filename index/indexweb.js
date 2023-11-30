@@ -98,7 +98,7 @@ function rotateout(deg = 90) {
   if (rotatef) {
     rotatef = false;
     var src = document.querySelector("#full-image").getAttribute("src");
-    var msrc = get_blob(src);
+    var msrc = get_blob2src(src);
     if (msrc != "") {
       ssr = msrc;
     }
@@ -126,7 +126,7 @@ var track_blob = (dd, ndd) => {
   }
   console.log(blob_list);
 }
-var get_blob = (dd) => {
+var get_blob2src = (dd) => {
   var dr = "";
   blob_list.forEach(function (obj) {
     if (obj.ndir === dd) {
@@ -137,7 +137,6 @@ var get_blob = (dd) => {
   return dr;
 }
 var addoutdir = () => {
-
   var dell = 0;
   if (fulls == 1 && phone) {
     fullscreen();
@@ -146,6 +145,10 @@ var addoutdir = () => {
     cout('y');
     var anum = parseInt(document.querySelector("#full-image").getAttribute("num"));
     var ssr = DATA[anum];
+    var msrc = get_blob2src(ssr);
+            if (msrc != "") {
+                ssr = msrc;
+            }
     cout(ssr);
     if (ssr.includes('?t=')) {
       ssr = ssr.replace('?t=', ':');
@@ -352,23 +355,29 @@ function rotateweb(srcBase64, degrees, callback) {
 
   image.onload = function () {
     image.setAttribute('crossorigin', 'anonymous');
-    canvas.width = degrees % 180 === 0 ? image.width : image.height;
-    canvas.height = degrees % 180 === 0 ? image.height : image.width;
+
+    // Resize the image before rotating
+    const resizedWidth = 800; // Adjust as needed
+    const resizedHeight = (image.height / image.width) * resizedWidth;
+    canvas.width = degrees % 180 === 0 ? resizedWidth : resizedHeight;
+    canvas.height = degrees % 180 === 0 ? resizedHeight : resizedWidth;
 
     ctx.translate(canvas.width / 2, canvas.height / 2);
     ctx.rotate(degrees * Math.PI / 180);
-    ctx.drawImage(image, image.width / -2, image.height / -2);
+    ctx.drawImage(image, -resizedWidth / 2, -resizedHeight / 2, resizedWidth, resizedHeight);
 
-    callback(canvas.toDataURL());
+    // Specify image type and quality
+    callback(canvas.toDataURL('image/jpeg', 0.8)); // Adjust quality as needed
   };
 
   image.src = srcBase64;
 }
+
 var rotater = (deg, src) => {
   rotatef = true;
   const imgr = document.querySelector("#full-image");
   var psrc = imgr.attributes.src.value;
-  rotateweb(imgr.attributes.src.value, deg, function (resultBase64) {
+  rotateweb(psrc, deg, function (resultBase64) {
     imgr.setAttribute('src', resultBase64);
     var nsrc = resultBase64;
     if (psrc == document.querySelector("body > div.images > img:nth-child(" + now + ")").src) {

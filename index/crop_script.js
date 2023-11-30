@@ -152,8 +152,14 @@ width = screen.availWidth * .8;
 document.querySelector("#crop-img").style.height = height + "px";
 
 var imagesrc = parent.cropeditval.val;//localStorage.getItem("crop");
+var imagebloburl = parent.cropeditval.blob_url;//localStorage.getItem("crop");
 //console.log(imagesrc);
+if(parent.web){
+document.querySelector("#crop-img").src = (imagesrc==imagebloburl)?imagesrc:imagebloburl;
+}
+else{
 document.querySelector("#crop-img").src = imagesrc;
+}
 /*
 var randarr = JSON.parse(localStorage.getItem("croprand"));
 var rand = randarr[randarr.length - 1];
