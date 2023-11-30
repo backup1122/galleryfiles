@@ -147,7 +147,7 @@ if (isset($_POST['ddir'])) {
 }
 
 if (isset($_POST['rdir'])) {
-  if (rotate($_POST['rdir']) == 1) {
+  if (rotate($_POST['rdir'],$_POST['deg']) == 1) {
     echo "Rotated";
   }
 }
