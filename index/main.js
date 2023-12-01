@@ -596,7 +596,7 @@ function idleTimerFunc() {
         cout("idle timer " + localStorage.getItem('idle'));
     }
 }
-console.log(localStorage.getItem('idle'));
+//console.log(localStorage.getItem('idle'));
 var cropeditfunc = (a) => {
 
     playstop();
