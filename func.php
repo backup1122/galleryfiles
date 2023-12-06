@@ -256,7 +256,7 @@ if (isset($cd)) {
   }
   $fp = fopen('dir.js', 'w');
   //fwrite($fp, 'DATA='.json_encode($array).';'.PHP_EOL .'DATAd='.json_encode($arrayd)).';'.PHP_EOL .'DATAf='.json_encode($arrayf)).';';
-  fwrite($fp, 'DATA=' . json_encode($array) . ';' . PHP_EOL . 'DATAf=' . json_encode($arrayf) . ';' . PHP_EOL . 'DATAd=' . json_encode($arrayd) . ';');
+  fwrite($fp, 'DATAf=' . json_encode($arrayf) . ';' . PHP_EOL . 'DATAd=' . json_encode($arrayd) . ';' . PHP_EOL . 'DATA=DATAd.concat(DATAf);');
 
   fclose($fp);
   unset($cd);
