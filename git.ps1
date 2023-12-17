@@ -1,5 +1,5 @@
 # List of files
-$fileList = @("f/r/31",  "f/r/32", "f/r/33")
+$fileList = @("f/r/34",".")
 
 # Loop through each file
 foreach ($file in $fileList) {
