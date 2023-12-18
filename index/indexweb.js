@@ -201,9 +201,8 @@ var get_blob2src = (dd) => {
 var track_del_blob = (dd, ndd) => {
   var f = 0;
   del_blob_list.forEach(function (obj) {
-    if (obj.ndir === dd) {
+    if (obj.dir === dd) {
       f = 1;
-      obj.ndir = ndd;
     }
   });
   if (f == 0) {
@@ -220,7 +219,7 @@ var get_del_blob2src = (dd) => {
       dr = obj.dir;
     }
   });
-  return dr;
+  return dr==""?dd:dr;
 }
 
 function UnDeleteWeb() {
@@ -238,7 +237,7 @@ function UnDeleteWeb() {
     var lshift = kkk.num == parseInt(document.querySelector("#full-image").getAttribute("num"));
     var rshift = kkk.num == (parseInt(document.querySelector("#full-image").getAttribute("num")) + 1);
     //track_blob(kkk.src, kkk.blob_url);
-    DATA.insert(kkk.num, kkk.blob_url);
+    DATA.insert(kkk.num, kkk.src);
     var mainimages = document.querySelector("body > div.images").childNodes;
 
     for (var i = 1; i < mainimages.length; i++) {
@@ -400,6 +399,7 @@ fetch(ssr)
     console.log('Blob URL:', blobUrl);
       var b={src:ssr,blob:blob,blob_url:blobUrl,num:anum,now: now}
       dblist.push(b);
+      track_del_blob(ssr, blobUrl);
       
 
   })
