@@ -176,7 +176,7 @@ function updateFile(path, updatedBlob) {
     });
 }
 
-function rotateout(deg = 90) {
+function rotateWeb(deg = 90) {
 
   if (rotatef) {
     rotatef = false;
@@ -232,7 +232,7 @@ var syncDel = () => {
     if (this.readyState === XMLHttpRequest.DONE && this.status == 200) {
       cout(JSON.parse(this.responseText).done);
 
-      snackbar("Updated Data");
+      snackbar("Updated Data || "+JSON.parse(this.responseText).no);
       //snackbar("Cleared");
 
     }
